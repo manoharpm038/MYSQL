@@ -1,0 +1,387 @@
+create database qafox;
+use qafox;
+show tables;
+create table qafox(id int,name varchar(20),experience int);
+insert into qafox(id,name) values(6,'manasa');
+select * from qafox where experience  is null;
+
+use qafox;
+show tables;
+select * from qafox;
+
+rename table qafox to emp;
+update qafox set name='kiran' where id=4;
+
+use qafox;
+show tables;
+alter table emp add location varchar(15);
+describe emp;
+
+use qafox;
+show tables;
+select * from emp;
+
+insert into emp values(7,'akash',25,'mysore');
+describe emp;
+set autocommit=0;
+insert into emp values(8,'rajath',30,'mandya');
+
+use qafox;
+show tables;
+select * from emp;
+set autocommit=0;
+
+use qafox;
+show tables;
+
+create database students;
+use students;
+ show tables;
+select * from students; 
+create table students(usn int,name varchar(15),address varchar(15));
+insert into students values(4,'chaithra','pinya');
+set autocommit=0;
+delete from students;
+
+-- group by
+select count(name),address from students group by address;
+
+use qafox;
+select * from emp;
+select count(name) from emp
+where experience>10
+group by name;
+
+-- UNION
+
+use qafox;
+create table tone(id int);
+insert into tone values(1);
+insert into tone values(2);
+insert into tone values(5);
+select * from tone;
+
+create table ttwo(num int);
+insert into ttwo values(2);
+insert into ttwo values(3);
+insert into ttwo values(4);
+select * from ttwo;
+
+select id from tone union select num from ttwo;
+
+create table empone(id int, name varchar(20));
+insert into empone values(1,'arjun');
+insert into empone values(3,'varun');
+insert into empone values(5,'tharun');
+select * from empone;
+
+create table emptwo(cone int, ctwo varchar(15));
+
+insert into emptwo values(2,'dinesh')
+insert into emptwo values(3,'alice');
+insert into emptwo values(4,'kiran')
+
+update emptwo
+set ctwo='varun'
+where cone=3;
+
+select * from empone union select * from emptwo;
+select id from empone union select cone from emptwo;
+
+create table empthree(cone int,ctwo varchar(15),cthree int);
+
+insert into empthree values(2,'dinesh',12); 
+insert into empthree values(3,'varun',5); 
+insert into empthree values(4,'kiran',7); 
+select * from empthree;
+
+select id,name from empone union select cone,ctwo from empthree;
+
+use qafox;
+
+create table empdetailsone(id int,firstname varchar(15));
+insert into empdetailsone values(1,'arun');
+insert into empdetailsone values(2,'varun');
+insert into empdetailsone values(4,'tharun');
+
+select * from empdetailsone;
+
+create table empdetailstwo(id int,lastname varchar(15));
+
+insert into empdetailstwo values(1,'motoori');
+insert into empdetailstwo values(4,'kumar');
+insert into empdetailstwo values(5,'rathod');
+
+select * from empdetailstwo;
+
+select *
+from empdetailssone
+inner join empdetailstwo
+on empdetailsone.id=empdetailstwo.id;
+
+
+use manohar;
+create table dept(deptno int primary key,dname varchar(20),loc varchar(20));
+insert into dept values(10,'accounting','new_york'),(20,'research','dallas'),(30,'sales','chicago'),(40,'operations','boston');
+select * from dept;
+
+create database manohar;
+use manohar;
+show tables;
+
+create table emp (empno int primary key,ename varchar(20),job varchar(20),mgr integer null,hiredate date,sal int,comm int null,deptno int,foreign key(deptno) references dept(deptno));
+desc emp;
+select * from emp;
+insert into emp values (7369,'SMITH','CLERK',7902,'1980-12-17',800,null,20),(7499,'ALLEN','SALESMAN',7698,'1981-02-20',1600,300,30),
+(7521,'WARD','SALESMAN',7698,'1981-02-22',1250,500,30),(7566,'JONES','MANAGER',7839,'1981-04-02',2975,null,20),
+(7654,'MARTIN','SALESMAN',7698,'1981-09-28',1250,1400,30),(7698,'BLAKE','MANAGER',7839,'1981-05-01',2850,null,30),
+(7782,'CLARK','MANAGER',7839,'1981-06-09',2450,null,10),(7788,'SCOTT','ANALYST',7566,'1987-04-19',3000,null,20),
+(7839,'KING','PRESIDENT',null,'1981-11-17',5000,null,10),(7844,'TURNER','SALESMAN',7698,'1981-09-08',1500,0,30),
+(7876,'ADAMS','CLERK',7788,'87-05-23',1100,null,20),(7900,'JAMES','CLERK',7698,'1981-12-03',950,null,30),
+(7902,'FORD','ANALYST',7566,'1981-12-03',3000,null,20),(7934,'MILLER','CLERK',7782,'1982-01-23',1300,null,10);
+
+select ename,deptno,job
+from emp
+where job = 'manager' and deptno = 10;
+
+select ename,sal,deptno 
+from emp
+where sal between 1250 and 4000 and deptno = 10;
+
+select ename,job,deptno
+from emp
+where job in('clerk','salesman') and (deptno =10 or deptno=30)and sal>1800;
+
+select ename,deptno
+from emp
+where deptno not in(10,30);
+
+select *, sal* 12 from emp where deptno=30 and job='salesman' and sal*12>10000;
+
+select ename from emp where ename like 's%';
+ 
+select ename from emp where ename like '%a';
+
+select ename from emp where ename like '_m%';
+
+select ename,hiredate from emp where hiredate like '%_04_%';
+
+select ename from emp where ename like '%a%a%';
+
+select count(ename) from emp where ename like '%e%';
+
+select count(mgr) from emp where ename like '%e%';
+
+select avg(sal),sum(sal),count(sal),max(sal)
+from emp
+where job='president';
+
+select job, max(sal)
+from emp
+group by job;
+
+select job,deptno,max(sal)
+from emp 
+group by job,deptno;
+
+select job,count(ename)
+from emp
+where ename like '%a%' group by job 
+order by job;
+
+select deptno,count(*)
+from emp
+group by deptno
+having count(*)>=3;
+
+use manohar;
+select ename
+from emp
+where substring(ename,1,1) in ('a','e','i','o','u');
+select * from emp;
+
+
+
+
+use manohar;
+select ename,deptno
+from emp
+where deptno=(select deptno from emp where ename='smith'); -- 20
+
+select ename,hiredate
+from emp
+where hiredate>(select hiredate from emp where ename='jones');
+
+select ename,sal,deptno
+from emp 
+where sal>2000 and deptno=(select deptno from emp where ename= 'james');
+
+select *      
+from emp 
+where sal>(select sal from emp where ename='smith') and sal< (select sal from emp where ename='king');
+
+select ename 
+from emp
+where deptno=(select ename from emp where ename='james') and sal>(select sal from emp where ename='smith') and 
+job=(select job from emp where ename='miller') and hiredate>(select hiredate from emp where ename='martin');
+
+select dname 
+from dept
+where deptno=(select deptno from emp where ename='miller');
+
+select count(ename)
+ from emp
+ where deptno=(select deptno from dept where dname='accounting');
+
+select *
+from emp
+where job=(select job from emp where ename='miller') and deptno=(select deptno from dept where loc='new_york');
+desc dept;
+select * from dept;
+
+use manohar;
+select ename
+from emp
+where sal>(select max(sal) from emp where job ='salesman');      -- 51
+
+select *
+from emp
+where hiredate>(select max(hiredate) from emp where job = 'clerk');   -- 52
+select * from emp;
+
+select ename,sal
+from emp
+where sal<(select min(sal) from emp where job='manager');       -- 53
+
+select ename,hiredate
+from emp
+where hiredate<(select min(hiredate) from emp where job = 'manager');  -- 54
+
+use manohar;
+select ename
+from emp
+where hiredate>(select max(hiredate) from emp where job='manager') and sal>(select max(sal) from emp where job='clerk');
+                                   -- 55
+                                   
+select * 
+from emp
+where job='clerk' and hiredate<(select min(hiredate) from emp where job='salesman'); -- 56
+
+use manohar;
+select * 
+from emp
+where deptno=(select deptno from dept where dname='accounting') or deptno=(select deptno from dept where dname='sales'); -- 57
+
+select dname,ename
+ from emp e,dept d 
+ where e.deptno=d.deptno and e.ename in ('smith','king','miller'); -- 58
+ 
+select e.*
+ from emp e,dept d 
+ where e.deptno=d.deptno and d.loc in ('new york','chicago'); -- 59
+ 
+select * 
+from emp 
+where deptno=(select deptno from dept where loc='new york') or deptno=(select deptno from dept where loc='chicago'); -- 59
+
+select ename 
+from emp
+where hiredate>(select max(hiredate) from emp where deptno=10);
+
+use manohar;
+select max(sal)
+from emp 
+where sal< (select max(sal) from emp);    -- second maximum salary   maximum(<) minimum(>)
+                                   
+use manohar;
+select e.ename,d.deptno
+from emp e
+cross join dept d;
+
+select ename,dname
+from emp e
+inner join dept d
+where e.deptno=d.deptno;
+
+select ename,loc
+from emp e 
+inner join dept d
+where e.deptno=d.deptno and  e.job = 'manager';
+
+select ename,sal,dname
+from emp e
+inner join dept d
+where e.deptno=d.deptno;
+
+select ename,sal
+from emp e
+inner join dept d
+where e.deptno=d.deptno and dname ='accounting';
+
+use manohar;
+select *
+from  emp e
+right join  dept d
+on e.deptno=d.deptno;
+
+select *
+from emp e 
+right join dept d
+on e.deptno=d.deptno
+union select * from emp e 
+left join dept d on e.deptno=d.deptno;
+
+
+select * 
+from emp e1 join emp e2
+on e1.mgr=e2.empno;      -- self join
+select * from emp;
+
+select a.ename,a.sal,b.ename,b.sal
+from emp a join emp b
+on a.mgr=b.empno;          -- 1
+
+select a.ename,b.ename,b.deptno
+from emp a join emp b
+on a.mgr=b.empno
+and a.job='clerk';          -- 2
+
+select a.ename,b.job
+from emp a join emp b
+on a.mgr=b.empno
+and a.job='analyst';       -- 3
+
+select a.ename,b.ename,a.job,b.job
+from emp a join emp b
+on a.mgr=b.empno
+and a.job=b.job;              -- 4
+
+select a.ename,a.sal,b.ename,b.sal
+from emp a join emp b
+on a.mgr=b.empno
+where b.sal>a.sal;              -- 5
+
+
+-- Natural join
+use manohar;
+select a.ename,b.job
+from emp a join emp b
+where b.deptno=10 or b.deptno=20;
+
+
+use manohar;
+select a.ename,a.sal,b.dname
+from emp a natural join dept b
+where a.deptno=(select a.deptno from emp a
+where a.job='president')
+order by a.sal desc;
+
+
+use manohar;
+select d.dname,avg(sal)
+from emp e
+natural join dept d
+where e.hiredate>'1981-01-01'
+group by(d.dname)
+order by avg(sal);
+
